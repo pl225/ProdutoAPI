@@ -23,6 +23,8 @@ public class Produto {
     @JoinColumn(name = "categoria_id")
     private Categoria categoria;
 
+    public Produto() {}
+
     public Produto(String nome, String codigo, Double valor, Categoria categoria) {
         this.nome = nome;
         this.codigo = codigo;
@@ -53,6 +55,9 @@ public class Produto {
     }
     public void setValor(Double valor) {
         this.valor = valor;
+    }
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
     }
 
     @Override
