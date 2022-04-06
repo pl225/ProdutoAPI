@@ -15,7 +15,6 @@ import br.produto.categoria.produtoapi.entities.Produto;
 import br.produto.categoria.produtoapi.exceptions.CategoriaNotFoundException;
 import br.produto.categoria.produtoapi.exceptions.ProdutoNotFoundException;
 import br.produto.categoria.produtoapi.repositories.CategoriaRepository;
-import br.produto.categoria.produtoapi.repositories.ProdutoCategoriaDto;
 import br.produto.categoria.produtoapi.repositories.ProdutoRepository;
 
 @RestController
@@ -35,13 +34,13 @@ public class ProdutoController {
     }
 
     @GetMapping("/produtos")
-    List<ProdutoCategoriaDto> all() {
-        return this.produtoRepository.findAllWithCategoria();
+    List<Produto> all() {
+        return this.produtoRepository.findAll();
     }
 
     @GetMapping("/produtos/{id}")
-    ProdutoCategoriaDto findOne(@PathVariable Long id) {
-        return this.produtoRepository.findByIdWithCategoria(id)
+    Produto findOne(@PathVariable Long id) {
+        return this.produtoRepository.findById(id)
             .orElseThrow(() -> new ProdutoNotFoundException(id));
     }
 

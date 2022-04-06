@@ -77,5 +77,9 @@ public class Produto {
         return String.format("%d %s %f", this.id, this.nome, this.valor);
     }
 
+    public Categoria getCategoria() {
+        return this.categoria;
+    }
+
     
 }
