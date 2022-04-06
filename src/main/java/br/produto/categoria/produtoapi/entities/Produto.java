@@ -19,7 +19,7 @@ public class Produto {
     private String codigo;
     private Double valor;
 
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "categoria_id")
     private Categoria categoria;
 

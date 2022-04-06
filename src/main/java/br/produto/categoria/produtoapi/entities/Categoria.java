@@ -1,8 +1,12 @@
 package br.produto.categoria.produtoapi.entities;
 
+import java.util.List;
+
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -15,6 +19,9 @@ public class Categoria {
 
     private String nome;
     private String descricao;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "categoria")
+    private List<Produto> produtos;
 
     public Categoria () {}
 
