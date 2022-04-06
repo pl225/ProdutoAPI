@@ -40,8 +40,8 @@ public class ProdutoController {
     }
 
     @GetMapping("/produtos/{id}")
-    Produto findOne(@PathVariable Long id) {
-        return this.produtoRepository.findById(id)
+    ProdutoCategoriaDto findOne(@PathVariable Long id) {
+        return this.produtoRepository.findByIdWithCategoria(id)
             .orElseThrow(() -> new ProdutoNotFoundException(id));
     }
 
