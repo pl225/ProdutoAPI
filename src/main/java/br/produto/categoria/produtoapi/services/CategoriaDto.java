@@ -1,4 +1,4 @@
-package br.produto.categoria.produtoapi.controllers;
+package br.produto.categoria.produtoapi.services;
 
 import javax.validation.constraints.NotNull;
 
@@ -28,7 +28,7 @@ public class CategoriaDto {
         this.descricao = descricao;
     }
 
-    Categoria toCategoria() {
+    public Categoria toCategoria() {
         return new Categoria(this.nome, this.descricao);
     }
     

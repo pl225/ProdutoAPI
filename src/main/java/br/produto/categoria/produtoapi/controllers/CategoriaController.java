@@ -13,53 +13,41 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.produto.categoria.produtoapi.entities.Categoria;
-import br.produto.categoria.produtoapi.exceptions.CategoriaNotFoundException;
-import br.produto.categoria.produtoapi.exceptions.CategoriaOcupadaException;
-import br.produto.categoria.produtoapi.repositories.CategoriaRepository;
+import br.produto.categoria.produtoapi.services.CategoriaDto;
+import br.produto.categoria.produtoapi.services.interfaces.CategoriaService;
 
 @RestController
 public class CategoriaController {
 
-    private final CategoriaRepository categoriaRepository;
+    private final CategoriaService service;
 
-    CategoriaController (CategoriaRepository categoriaController) {
-        this.categoriaRepository = categoriaController;
+    CategoriaController (CategoriaService service) {
+        this.service = service;
     }
 
     @GetMapping("/categorias")
     List<Categoria> all() {
-        return this.categoriaRepository.findAll();
+        return this.service.findAll();
     }
 
     @GetMapping("/categorias/{id}")
     Categoria findOne(@PathVariable Long id) {
-        return this.categoriaRepository.findById(id)
-            .orElseThrow(() -> new CategoriaNotFoundException(id));
+        return this.service.findOne(id);
     }
 
     @DeleteMapping("/categorias/{id}")
     void deleteCategoria(@PathVariable Long id) {
-        Boolean isUtilizadaPorProduto = this.categoriaRepository.existeProdutoCategoria(id) > 0;
-        if (isUtilizadaPorProduto) throw new CategoriaOcupadaException(id);
-
-        if (!this.categoriaRepository.existsById(id)) throw new CategoriaNotFoundException(id);
-        this.categoriaRepository.deleteById(id);
+        this.service.deleteCategoria(id);
     }
 
     @PostMapping("/categorias")
     Categoria save(@Valid @RequestBody CategoriaDto dto) {
-        return this.categoriaRepository.save(dto.toCategoria());
+        return this.service.save(dto);
     }
 
     @PutMapping("/categorias/{id}")
     Categoria updCategoria(@Valid @RequestBody CategoriaDto dto, @PathVariable Long id) {
-        return this.categoriaRepository.findById(id)
-            .map(c -> {
-                c.setDescricao(dto.getDescricao());
-                c.setNome(dto.getNome());
-                return this.categoriaRepository.save(c);
-            })
-            .orElseThrow(() -> new CategoriaNotFoundException(id));
+        return this.service.updCategoria(dto, id);
     }
     
 }
