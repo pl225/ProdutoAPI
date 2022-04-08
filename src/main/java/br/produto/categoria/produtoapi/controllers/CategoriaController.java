@@ -2,6 +2,8 @@ package br.produto.categoria.produtoapi.controllers;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -45,12 +47,12 @@ public class CategoriaController {
     }
 
     @PostMapping("/categorias")
-    Categoria save(@RequestBody CategoriaDto dto) {
+    Categoria save(@Valid @RequestBody CategoriaDto dto) {
         return this.categoriaRepository.save(dto.toCategoria());
     }
 
     @PutMapping("/categorias/{id}")
-    Categoria updCategoria(@RequestBody CategoriaDto dto, @PathVariable Long id) {
+    Categoria updCategoria(@Valid @RequestBody CategoriaDto dto, @PathVariable Long id) {
         return this.categoriaRepository.findById(id)
             .map(c -> {
                 c.setDescricao(dto.getDescricao());

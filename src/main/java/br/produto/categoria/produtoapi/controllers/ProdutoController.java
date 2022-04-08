@@ -2,6 +2,8 @@ package br.produto.categoria.produtoapi.controllers;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -51,13 +53,13 @@ public class ProdutoController {
     }
 
     @PostMapping("/produtos")
-    Produto save(@RequestBody ProdutoDto dto) {
+    Produto save(@Valid @RequestBody ProdutoDto dto) {
         Categoria categoria = this.getCategoria(dto.getCategoriaId());
         return this.produtoRepository.save(dto.toProduto(categoria));
     }
 
     @PutMapping("/produtos/{id}")
-    Produto updProduto(@RequestBody ProdutoDto dto, @PathVariable Long id) {
+    Produto updProduto(@Valid @RequestBody ProdutoDto dto, @PathVariable Long id) {
         Categoria categoria = this.getCategoria(dto.getCategoriaId());
         
         return this.produtoRepository.findById(id)

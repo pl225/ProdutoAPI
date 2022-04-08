@@ -1,6 +1,10 @@
 package br.produto.categoria.produtoapi.configurations;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -14,8 +18,12 @@ class ProdutoNotFoundAdvice {
     @ResponseBody
     @ExceptionHandler(ProdutoNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    String produtoNotFoundHandler(ProdutoNotFoundException exception) {
-        return exception.getMessage();
+    ResponseEntity<?> produtoNotFoundHandler(ProdutoNotFoundException exception) {
+        Map<String, String> body = new HashMap<>();
+
+        body.put("message", exception.getMessage());
+
+        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }
 
 }

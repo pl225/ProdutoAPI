@@ -1,13 +1,25 @@
 package br.produto.categoria.produtoapi.controllers;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+
 import br.produto.categoria.produtoapi.entities.Categoria;
 import br.produto.categoria.produtoapi.entities.Produto;
 
 public class ProdutoDto {
 
+    @NotNull(message = "O nome do produto é obrigatório.")
     private String nome;
+
+    @NotNull(message = "O código do produto é obrigatório.")
     private String codigo;
+
+    @NotNull(message = "O valor do produto é obrigatório.")
+    @Positive(message = "O valor do produto deve ser maior que zero.")
     private Double valor;
+
+    @NotNull(message = "O identificador da categoria do produto é obrigatório.")
+    @Positive(message = "O identificador da categoria do produto deve ser maior que zero.")
     private Long categoriaId;
     
     public String getNome() {
