@@ -12,66 +12,42 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.produto.categoria.produtoapi.entities.Categoria;
 import br.produto.categoria.produtoapi.entities.Produto;
-import br.produto.categoria.produtoapi.exceptions.CategoriaNotFoundException;
-import br.produto.categoria.produtoapi.exceptions.ProdutoNotFoundException;
-import br.produto.categoria.produtoapi.repositories.CategoriaRepository;
-import br.produto.categoria.produtoapi.repositories.ProdutoRepository;
+import br.produto.categoria.produtoapi.services.ProdutoDto;
+import br.produto.categoria.produtoapi.services.interfaces.ProdutoService;
 
 @RestController
 public class ProdutoController {
 
-    private final ProdutoRepository produtoRepository;
-    private final CategoriaRepository categoriaRepository;
+    private final ProdutoService produtoService;
 
-    ProdutoController (ProdutoRepository produtoRepository, CategoriaRepository categoriaRepository) {
-        this.produtoRepository = produtoRepository;
-        this.categoriaRepository = categoriaRepository;
-    }
-
-    private Categoria getCategoria(Long id) {
-        return this.categoriaRepository.findById(id)
-            .orElseThrow(() -> new CategoriaNotFoundException(id));
+    ProdutoController (ProdutoService produtoService) {
+        this.produtoService = produtoService;
     }
 
     @GetMapping("/produtos")
     List<Produto> all() {
-        return this.produtoRepository.findAll();
+        return this.produtoService.all();
     }
 
     @GetMapping("/produtos/{id}")
     Produto findOne(@PathVariable Long id) {
-        return this.produtoRepository.findById(id)
-            .orElseThrow(() -> new ProdutoNotFoundException(id));
+        return this.produtoService.findOne(id);
     }
 
     @DeleteMapping("/produtos/{id}")
     void deleteProduto(@PathVariable Long id) {
-        if (!this.produtoRepository.existsById(id)) throw new ProdutoNotFoundException(id);
-        this.produtoRepository.deleteById(id);
+        this.produtoService.deleteProduto(id);
     }
 
     @PostMapping("/produtos")
     Produto save(@Valid @RequestBody ProdutoDto dto) {
-        Categoria categoria = this.getCategoria(dto.getCategoriaId());
-        return this.produtoRepository.save(dto.toProduto(categoria));
+        return this.produtoService.save(dto);
     }
 
     @PutMapping("/produtos/{id}")
     Produto updProduto(@Valid @RequestBody ProdutoDto dto, @PathVariable Long id) {
-        Categoria categoria = this.getCategoria(dto.getCategoriaId());
-        
-        return this.produtoRepository.findById(id)
-            .map(p -> {
-                p.setCodigo(dto.getCodigo());
-                p.setNome(dto.getNome());
-                p.setValor(dto.getValor());
-                p.setCategoria(categoria);
-
-                return this.produtoRepository.save(p);
-            })
-            .orElseThrow(() -> new ProdutoNotFoundException(id));
+        return this.produtoService.updProduto(dto, id);
     }
     
 }

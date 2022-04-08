@@ -1,4 +1,4 @@
-package br.produto.categoria.produtoapi.controllers;
+package br.produto.categoria.produtoapi.services;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
